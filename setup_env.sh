@@ -6,11 +6,6 @@ sudo apt update -y
 # download python and gdown
 echo "==== Downloading Gdown ===="
 sudo apt install python3-pip -y
-# sudo apt-get install libnuma-dev
-# sudo apt-get install libmemcached-dev zlib1g-dev
-# sudo apt-get install numactl
-# sudo apt-get install memcached
-# sudo apt-get install hugead
 
 pip3 install gdown
 
@@ -43,18 +38,18 @@ sudo /etc/init.d/openibd restart
 # fi
 
 # install cmake
-cd install
-wget https://cmake.org/files/v3.16/cmake-3.16.8.tar.gz
-if [ ! -d "./cmake-3.16.8" ]; then
-  tar zxf cmake-3.16.8.tar.gz
-  cd cmake-3.16.8 && ./configure && make -j 4 && sudo make install
-fi
+# cd install
+# wget https://cmake.org/files/v3.16/cmake-3.16.8.tar.gz
+# if [ ! -d "./cmake-3.16.8" ]; then
+#   tar zxf cmake-3.16.8.tar.gz
+#   cd cmake-3.16.8 && ./configure && make -j 4 && sudo make install
+# fi
 
 
 # install gtest
-if [ ! -d "/usr/src/gtest" ]; then
-  cd /usr/src/gtest
-  sudo apt install -y libgtest-dev
-  sudo mkdir build
-  cd build && sudo cmake .. && sudo make -j 4 && sudo make install
-fi
+# if [ ! -d "/usr/src/gtest" ]; then
+#   cd /usr/src/gtest
+#   sudo apt install -y libgtest-dev
+#   sudo mkdir build
+#   cd build && sudo cmake .. && sudo make -j 4 && sudo make install
+# fi
