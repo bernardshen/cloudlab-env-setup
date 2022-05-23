@@ -1,5 +1,29 @@
 #!/bin/bash
 
+mode=$1
+ofed_fid=""
+
+if [ $mode == "redn" ]; then
+  ubuntu_version=$(lsb_release -r -s)
+  if [ $ubuntu_version == "18.04" ]; then
+    ofed_fid="1mRAbumsdeP_nLRECohTpcaOmZ5sID0QP"
+  elif [ $ubuntu_version == "16.04" ]; then
+    ofed_fid="18OQ4NemC4Xj_Fhlj3P6skvh9Du5n4Z9m"
+  else
+    echo "Wrong ubuntu distribution for $mode!"
+    exit 0
+  fi
+elif [ $mode == "scalestore" ]; then
+  ubuntu_version=$(lsb_release -r -s)
+  if [ $ubuntu_version == "18.04" ]; then
+    ofed_fid="1xfZCA5eTttiQGOFXsewlTqGKVZe7MYy_"
+  else
+    echo "Wrong ubuntu distribution for $mode!"
+    exit 0
+  fi
+fi
+exit 0
+
 sudo apt update -y
 # echo "jcshen:123456" | sudo chpasswd
 
@@ -10,24 +34,14 @@ sudo apt install python3-pip -y
 pip3 install gdown
 
 # download ofed from gdrive
-echo "==== Download OFED ===="
-if [ ! -d "./install/ofed.tar.gz" ]; then
-  mkdir install
-  cat > download_ofed.py <<- EOF
-import gdown
-url = 'https://drive.google.com/uc?id=1xfZCA5eTttiQGOFXsewlTqGKVZe7MYy_&export=download'
-output = './install/ofed.tar.gz'
-gdown.download(url, output, quiet=False)
-EOF
-  python3 download_ofed.py
-fi
+python3 download_ofed.py $ofed_fid ofed.tar.gz
 
 # install ofed
 cd install
-if [ ! -d "./MLNX_OFED_LINUX-4.9-3.1.5.0-ubuntu18.04-x86_64" ]; then
-  tar zxf ofed.tar.gz
+if [ ! -d "./ofed" ]; then
+  tar zxf ofed.tar.gz ofed
 fi
-cd MLNX_OFED_LINUX-4.9-3.1.5.0-ubuntu18.04-x86_64
+cd ofed
 sudo ./mlnxofedinstall
 sudo /etc/init.d/openibd restart
 
