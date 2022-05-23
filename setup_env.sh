@@ -1,18 +1,17 @@
 #!/bin/bash
 
 mode="$1"
-ofed_fid=""
 
 if [ $mode == "redn" ]; then
   ubuntu_version=$(lsb_release -r -s)
-  if [ $ubuntu_version == "18.04" ]; then
-    ofed_fid="1mRAbumsdeP_nLRECohTpcaOmZ5sID0QP"
-  elif [ $ubuntu_version == "16.04" ]; then
-    ofed_fid="18OQ4NemC4Xj_Fhlj3P6skvh9Du5n4Z9m"
-  else
-    echo "Wrong ubuntu distribution for $mode!"
-    exit 0
-  fi
+    if [ $ubuntu_version == "18.04" ]; then
+        ofed_fid="1mRAbumsdeP_nLRECohTpcaOmZ5sID0QP"
+    elif [ $ubuntu_version == "16.04" ]; then
+      ofed_fid="18OQ4NemC4Xj_Fhlj3P6skvh9Du5n4Z9m"
+    else
+      echo "Wrong ubuntu distribution for $mode!"
+      exit 0
+    fi
 elif [ $mode == "scalestore" ]; then
   ubuntu_version=$(lsb_release -r -s)
   if [ $ubuntu_version == "18.04" ]; then
@@ -22,28 +21,49 @@ elif [ $mode == "scalestore" ]; then
     exit 0
   fi
 fi
-exit 0
+echo $mode $ubuntu_version $ofed_fid
 
 sudo apt update -y
-# echo "jcshen:123456" | sudo chpasswd
+
+# install anaconda
+if [ ! -d "./install" ]; then
+mkdir install
+fi
+cd install
+if [ ! -f "./anaconda-install.sh" ]; then
+  wget https://repo.anaconda.com/archive/Anaconda3-2022.05-Linux-x86_64.sh -O anaconda-install.sh
+fi
+if [ ! -d "$HOME/anaconda3" ]; then
+  chmod +x anaconda-install.sh
+  ./anaconda-install.sh -b
+  # add conda to path
+  echo PATH=$PATH:$HOME/anaconda3/bin >> $HOME/.bashrc
+  conda init
+  source ~/.bashrc
+  # activate base
+fi
+conda activate base
+cd ..
 
 # download python and gdown
-echo "==== Downloading Gdown ===="
-sudo apt install python3-pip -y
+# echo "==== Downloading Gdown ===="
+# sudo apt install python3-pip -y
 
-pip3 install gdown
+pip install gdown
 
 # download ofed from gdrive
-python3 download_ofed.py $ofed_fid ofed.tar.gz
+python download_gdrive.py $ofed_fid install/ofed.tar.gz
 
 # install ofed
 cd install
 if [ ! -d "./ofed" ]; then
-  tar zxf ofed.tar.gz ofed
+  tar zxf ofed.tar.gz
+  mv MLNX* ofed
 fi
 cd ofed
 sudo ./mlnxofedinstall
 sudo /etc/init.d/openibd restart
+cd ..
 
 # install oh my zsh
 # cd ~
@@ -51,19 +71,27 @@ sudo /etc/init.d/openibd restart
 #   sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
 # fi
 
+
 # install cmake
-# cd install
-# wget https://cmake.org/files/v3.16/cmake-3.16.8.tar.gz
-# if [ ! -d "./cmake-3.16.8" ]; then
-#   tar zxf cmake-3.16.8.tar.gz
-#   cd cmake-3.16.8 && ./configure && make -j 4 && sudo make install
-# fi
+if [ $mode == "scalestore" ]; then
+  cd install
+  if [ ! -f cmake-3.16.8.tar.gz ]; then
+    wget https://cmake.org/files/v3.16/cmake-3.16.8.tar.gz
+  fi
+  if [ ! -d "./cmake-3.16.8" ]; then
+    tar zxf cmake-3.16.8.tar.gz
+    cd cmake-3.16.8 && ./configure && make -j 4 && sudo make install
+  fi
+  cd ..
+fi
 
 
 # install gtest
-# if [ ! -d "/usr/src/gtest" ]; then
-#   cd /usr/src/gtest
-#   sudo apt install -y libgtest-dev
-#   sudo mkdir build
-#   cd build && sudo cmake .. && sudo make -j 4 && sudo make install
-# fi
+if [ $mode == "scalestore" ]; then
+  if [ ! -d "/usr/src/gtest" ]; then
+    cd /usr/src/gtest
+    sudo apt install -y libgtest-dev
+    sudo mkdir build
+    cd build && sudo cmake .. && sudo make -j 4 && sudo make install
+  fi
+fi
