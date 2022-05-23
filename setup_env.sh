@@ -62,7 +62,9 @@ if [ ! -d "./ofed" ]; then
 fi
 cd ofed
 sudo ./mlnxofedinstall
-sudo /etc/init.d/openibd restart
+if [ $mode == "scalestore" ]; then
+  sudo /etc/init.d/openibd restart
+fi
 cd ..
 
 # install oh my zsh
@@ -94,4 +96,8 @@ if [ $mode == "scalestore" ]; then
     sudo mkdir build
     cd build && sudo cmake .. && sudo make -j 4 && sudo make install
   fi
+fi
+
+if [ $mode == "redn" ]; then
+  echo "Please restart the machine"
 fi
