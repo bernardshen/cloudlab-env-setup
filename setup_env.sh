@@ -36,6 +36,7 @@ fi
 if [ ! -d "$HOME/anaconda3" ]; then
   chmod +x anaconda-install.sh
   ./anaconda-install.sh -b
+  export PATH=$PATH:$HOME/anaconda3/bin
   # add conda to path
   echo PATH=$PATH:$HOME/anaconda3/bin >> $HOME/.bashrc
   conda init
