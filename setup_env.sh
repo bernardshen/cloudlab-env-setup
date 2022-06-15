@@ -92,11 +92,11 @@ fi
 # install gtest
 if [ $mode == "scalestore" ]; then
   if [ ! -d "/usr/src/gtest" ]; then
-    cd /usr/src/gtest
     sudo apt install -y libgtest-dev
     sudo mkdir build
-    cd build && sudo cmake .. && sudo make -j 4 && sudo make install
+    cd /usr/src/gtest
   fi
+  cd build && sudo cmake .. && sudo make -j 4 && sudo make install
 fi
 
 if [ $mode == "redn" ]; then
