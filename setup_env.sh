@@ -1,9 +1,9 @@
 #!/bin/bash
 
 mode="$1"
+ubuntu_version=$(lsb_release -r -s)
 
 if [ $mode == "redn" ]; then
-  ubuntu_version=$(lsb_release -r -s)
     if [ $ubuntu_version == "18.04" ]; then
         ofed_fid="1mRAbumsdeP_nLRECohTpcaOmZ5sID0QP"
     elif [ $ubuntu_version == "16.04" ]; then
@@ -13,9 +13,10 @@ if [ $mode == "redn" ]; then
       exit 0
     fi
 elif [ $mode == "scalestore" ]; then
-  ubuntu_version=$(lsb_release -r -s)
   if [ $ubuntu_version == "18.04" ]; then
     ofed_fid="1xfZCA5eTttiQGOFXsewlTqGKVZe7MYy_"
+  elif [ $ubuntu_version == "20.04" ]; then
+    ofed_fid="1yPvFSKFFTpBcc7zzTdkqf97tyG6uJ0TN"
   else
     echo "Wrong ubuntu distribution for $mode!"
     exit 0
