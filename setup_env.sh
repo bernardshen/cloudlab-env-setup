@@ -12,7 +12,7 @@ if [ $mode == "redn" ]; then
       echo "Wrong ubuntu distribution for $mode!"
       exit 0
     fi
-elif [ $mode == "scalestore" ]; then
+elif [ $mode == "scalestore" || $mode == "dmc" ]; then
   if [ $ubuntu_version == "18.04" ]; then
     ofed_fid="1xfZCA5eTttiQGOFXsewlTqGKVZe7MYy_"
   elif [ $ubuntu_version == "20.04" ]; then
@@ -47,14 +47,15 @@ fi
 conda activate base
 cd ..
 
-# download python and gdown
-# echo "==== Downloading Gdown ===="
-# sudo apt install python3-pip -y
-
 pip install gdown
 
 # download ofed from gdrive
 python download_gdrive.py $ofed_fid install/ofed.tar.gz
+
+if [ $mode == "dmc" ]; then
+  pip install python-memcached
+  sudo apt install libmemcached-dev
+fi
 
 # install ofed
 cd install
@@ -77,7 +78,7 @@ cd ..
 
 
 # install cmake
-if [ $mode == "scalestore" ]; then
+if [ $mode == "scalestore" || $mode == "dmc" ]; then
   cd install
   if [ ! -f cmake-3.16.8.tar.gz ]; then
     wget https://cmake.org/files/v3.16/cmake-3.16.8.tar.gz
@@ -91,13 +92,14 @@ fi
 
 
 # install gtest
-if [ $mode == "scalestore" ]; then
+if [ $mode == "scalestore" || $mode == "dmc" ]; then
   if [ ! -d "/usr/src/gtest" ]; then
     sudo apt install -y libgtest-dev
-    sudo mkdir build
-    cd /usr/src/gtest
   fi
-  cd build && sudo cmake .. && sudo make -j 4 && sudo make install
+  cd /usr/src/gtest
+  sudo cmake .
+  sudo make
+  sudo make install
 fi
 
 if [ $mode == "redn" ]; then
