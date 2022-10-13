@@ -12,7 +12,7 @@ if [ $mode == "redn" ]; then
       echo "Wrong ubuntu distribution for $mode!"
       exit 0
     fi
-elif [ $mode == "scalestore" || $mode == "dmc" ]; then
+elif [ $mode == "scalestore" ] || [ $mode == "dmc" ]; then
   if [ $ubuntu_version == "18.04" ]; then
     ofed_fid="1xfZCA5eTttiQGOFXsewlTqGKVZe7MYy_"
   elif [ $ubuntu_version == "20.04" ]; then
@@ -78,7 +78,7 @@ cd ..
 
 
 # install cmake
-if [ $mode == "scalestore" || $mode == "dmc" ]; then
+if [ $mode == "scalestore" ] || [ $mode == "dmc" ]; then
   cd install
   if [ ! -f cmake-3.16.8.tar.gz ]; then
     wget https://cmake.org/files/v3.16/cmake-3.16.8.tar.gz
