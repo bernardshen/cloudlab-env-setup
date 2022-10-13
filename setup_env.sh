@@ -92,7 +92,7 @@ fi
 
 
 # install gtest
-if [ $mode == "scalestore" || $mode == "dmc" ]; then
+if [ $mode == "scalestore" ] || [ $mode == "dmc" ]; then
   if [ ! -d "/usr/src/gtest" ]; then
     sudo apt install -y libgtest-dev
   fi
