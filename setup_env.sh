@@ -12,11 +12,18 @@ if [ $mode == "redn" ]; then
       echo "Wrong ubuntu distribution for $mode!"
       exit 0
     fi
-elif [ $mode == "scalestore" ] || [ $mode == "dmc" ]; then
+elif [ $mode == "scalestore" ]; then
   if [ $ubuntu_version == "18.04" ]; then
     ofed_fid="1xfZCA5eTttiQGOFXsewlTqGKVZe7MYy_"
   elif [ $ubuntu_version == "20.04" ]; then
     ofed_fid="1yPvFSKFFTpBcc7zzTdkqf97tyG6uJ0TN"
+  else
+    echo "Wrong ubuntu distribution for $mode!"
+    exit 0
+  fi
+elif [ $mode == "dmc" ]; then
+  if [ $ubuntu_version == "18.04" ]; then
+    ofed_fid="1mRAbumsdeP_nLRECohTpcaOmZ5sID0QP"
   else
     echo "Wrong ubuntu distribution for $mode!"
     exit 0
