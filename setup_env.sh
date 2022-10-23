@@ -23,7 +23,8 @@ elif [ $mode == "scalestore" ]; then
   fi
 elif [ $mode == "dmc" ]; then
   if [ $ubuntu_version == "18.04" ]; then
-    ofed_fid="1mRAbumsdeP_nLRECohTpcaOmZ5sID0QP"
+    ofed_fid="1xfZCA5eTttiQGOFXsewlTqGKVZe7MYy_"
+    # ofed_fid="1mRAbumsdeP_nLRECohTpcaOmZ5sID0QP"
   else
     echo "Wrong ubuntu distribution for $mode!"
     exit 0
