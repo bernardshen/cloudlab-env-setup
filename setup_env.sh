@@ -63,6 +63,7 @@ python download_gdrive.py $ofed_fid install/ofed.tar.gz
 if [ $mode == "dmc" ]; then
   pip install python-memcached
   sudo apt install libmemcached-dev -y
+  sudo apt install libbost-all-dev -y
 fi
 
 # install ofed
