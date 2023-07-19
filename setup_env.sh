@@ -64,6 +64,37 @@ if [ $mode == "dmc" ]; then
   pip install python-memcached
   sudo apt install libmemcached-dev -y
   sudo apt install libbost-all-dev -y
+
+  # install redis
+  sudo apt update -y
+  sudo apt install lsb-release -y
+  curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
+  echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
+  sudo apt-get update -y
+  sudo apt-get install redis -y
+
+  # install hiredis
+  sudo apt install libhiredis-dev -y
+  
+  # install redis++
+  if [ ! -d "third_party" ]; then
+    mkdir third_party
+  fi
+  cd third_party
+  git clone https://github.com/sewenew/redis-plus-plus.git
+  cd redis-plus-plus
+  mkdir build
+  cd build
+  cmake ..
+  make -j 8
+  sudo make install
+  cd ..
+
+  cd ..
+
+  # export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
+  echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/usr/local/lib" >> ~/.zshrc
+  source ~/.zshrc
 fi
 
 # install ofed
