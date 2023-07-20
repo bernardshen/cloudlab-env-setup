@@ -89,13 +89,13 @@ if [ $mode == "dmc" ]; then
   make -j 8
   sudo make install
   cd ..
-
+  cd ..
   cd ..
 
   # export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
   echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/usr/local/lib" >> ~/.zshrc
   echo "ulimit -n unlimited" >> ~/.zshrc
-  source ~/.zshrc
+  # source ~/.zshrc
 fi
 
 # install ofed
